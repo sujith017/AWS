@@ -1,0 +1,20 @@
+version: 2.1
+
+jobs:
+  deploy_infrastructure:
+    docker:
+      - image: circleci/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install Terraform
+          command: sudo apt-get update && sudo apt-get install terraform
+      - run:
+          name: Initialize Terraform
+          command: terraform init
+      - run:
+          name: Plan Terraform changes
+          command: terraform plan -out plan.out
+      - run:
+          name: Apply Terraform changes
+          command: terraform apply -auto-approve plan.out
