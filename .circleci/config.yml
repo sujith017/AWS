@@ -42,4 +42,3 @@ workflows:
       - terraform_destroy:
           requires:
             - terraform_apply
-
