@@ -7,7 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-      
           name: Install Terraform
           command: sudo apt-get update && sudo apt-get install terraform
       - run:
@@ -19,3 +18,9 @@ jobs:
       - run:
           name: Apply Terraform changes
           command: terraform apply -auto-approve plan.out
+
+workflows:
+  version: 
+  deploy:
+    jobs:
+      - deploy_infrastructure
