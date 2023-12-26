@@ -16,7 +16,8 @@ jobs:
       - image: hashicorp/terraform:1.0.2
     working_directory: /app
     steps:
-      - checkout
+      - attach_workspace:
+          at: /app
       - run:
           name: Generate Terraform plan
           command: terraform plan -out plan.out
@@ -26,7 +27,8 @@ jobs:
       - image: hashicorp/terraform:1.0.2
     working_directory: /app
     steps:
-      - checkout
+      - attach_workspace:
+          at: /app
       - run:
           name: Apply Terraform changes
           command: terraform apply -auto-approve plan.out
@@ -36,7 +38,8 @@ jobs:
       - image: hashicorp/terraform:1.0.2
     working_directory: /app
     steps:
-      - checkout
+      - attach_workspace:
+          at: /app
       - run:
           name: Destroy Terraform resources
           command: terraform destroy -auto-approve
