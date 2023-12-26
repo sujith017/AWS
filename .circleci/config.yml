@@ -11,6 +11,16 @@ jobs:
           name: Initialize Terraform
           command: terraform init
 
+  terraform_plan:
+    docker:
+      - image: hashicorp/terraform:1.0.2
+    working_directory: /app
+    steps:
+      - checkout
+      - run:
+          name: Generate Terraform plan
+          command: terraform plan -out plan.out
+
   terraform_apply:
     docker:
       - image: hashicorp/terraform:1.0.2
@@ -19,7 +29,7 @@ jobs:
       - checkout
       - run:
           name: Apply Terraform changes
-          command: terraform apply -auto-approve
+          command: terraform apply -auto-approve plan.out
 
   terraform_destroy:
     docker:
@@ -36,9 +46,12 @@ workflows:
   build_and_deploy:
     jobs:
       - terraform_init
-      - terraform_apply:
+      - terraform_plan:
           requires:
             - terraform_init
+      - terraform_apply:
+          requires:
+            - terraform_plan
       - terraform_destroy:
           requires:
             - terraform_apply
