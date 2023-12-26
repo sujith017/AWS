@@ -19,8 +19,26 @@ jobs:
           name: Apply Terraform changes
           command: terraform apply -auto-approve plan.out
 
+  destroy_infrastructure:
+    docker:
+      - image: circleci/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install Terraform
+          command: sudo apt-get update && sudo apt-get install terraform
+      - run:
+          name: Initialize Terraform
+          command: terraform init
+      - run:
+          name: Destroy Terraform resources
+          command: terraform destroy -auto-approve
+
 workflows:
-  version: 
-  deploy:
+  version: 2
+  deploy_and_destroy:
     jobs:
       - deploy_infrastructure
+      - destroy_infrastructure:
+          requires:
+            - deploy_infrastructure
